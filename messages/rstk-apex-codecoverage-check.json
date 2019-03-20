@@ -1,0 +1,9 @@
+{
+  "commandDescription": "Review the unit test codecoverage report for an org and return an error if the coverage is not sufficient",
+  "testCoverageFileFlagDescription": "Location of test coverage file.  Usually, this is the 'test-result-707000000000000.json' where the 707 number is the unit test run id.",
+  "examplesDescription": " ",
+  "ignoreOrgCoverageFailureFlagDescription": "Include this flag will not fail the command if the org coverage is below the amount specified",
+  "ignoreClassCoverageFailuresFlagDescription": "Include this flag will not fail the command if the individal Apex classes code coverage is below the amount specified",
+  "errorOrgWideCoverageBelowMinimum": "The org wide code coverage is %s% and less than the required minimum amount of %s%",
+  "errorClassCoverageBelowMinimum": "The code coverage for %s is %s% and less than the required minimum amount of %s%"
+}

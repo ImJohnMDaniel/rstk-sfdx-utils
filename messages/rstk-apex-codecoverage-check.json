@@ -5,5 +5,7 @@
   "ignoreOrgCoverageFailureFlagDescription": "Include this flag will not fail the command if the org coverage is below the amount specified",
   "ignoreClassCoverageFailuresFlagDescription": "Include this flag will not fail the command if the individal Apex classes code coverage is below the amount specified",
   "errorOrgWideCoverageBelowMinimum": "The org wide code coverage is %s% and less than the required minimum amount of %s%",
-  "errorClassCoverageBelowMinimum": "The code coverage for %s is %s% and less than the required minimum amount of %s%"
+  "errorClassCoverageBelowMinimum": "The code coverage for %s is %s% and less than the required minimum amount of %s%",
+  "throwErrorOnInsufficientOrgCoverageFlagDescription": "If true, the command will throw an error exception if the org code coverage requirement is not met.",
+  "throwErrorOnInsufficientClassCoverageFlagDescription": "If true, the command will throw an error exception if the class code coverage requirement is not met."
 }

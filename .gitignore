@@ -16,3 +16,4 @@ sfdx-project.json
 /.sfdx
 output.json
 /target
+/.vscode/settings.json

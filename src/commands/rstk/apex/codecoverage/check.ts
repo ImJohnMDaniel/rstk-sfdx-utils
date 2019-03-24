@@ -10,7 +10,7 @@ export default class Check extends SfdxCommand {
 
     public static description = messages.getMessage('commandDescription');
 
-    public static examples = [messages.getMessage('examplesDescription')];
+    public static examples = [messages.getMessage('example1Description'), messages.getMessage('example2Description')];
 
     protected static flagsConfig = {
         testcoveragefile: flags.string({ char: 'f', required: true, description: messages.getMessage('testCoverageFileFlagDescription') }),
@@ -38,7 +38,7 @@ export default class Check extends SfdxCommand {
 
         // this.ux.logJson(converageRequirementForApexClass);
         // When reading a file with core library, it is an async operation and thus you need the "await" command added.
-        // this.ux.log(this.flags.testcoveragefile);
+        this.ux.log(messages.getMessage('commandStartMessage',[this.flags.testcoveragefile]));
         checkResult['testCoverageFileReviewed'] = this.flags.testcoveragefile;
         // JSON.parse(fs.readFileSync(projectFile.getPath(), 'UTF-8'));
         // const coverages = await core.fs.readJsonMap(this.flags.testcoveragefile);

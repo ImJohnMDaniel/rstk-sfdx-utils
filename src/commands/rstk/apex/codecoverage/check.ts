@@ -26,6 +26,7 @@ export default class Check extends SfdxCommand {
     public async run(): Promise<any> { // tslint:disable-line:no-any
 
         const checkResult = {};
+        
 
         const projectJson = await this.project.retrieveSfdxProjectJson();
         // this.ux.logJson(projectJson);
@@ -38,7 +39,7 @@ export default class Check extends SfdxCommand {
 
         // this.ux.logJson(converageRequirementForApexClass);
         // When reading a file with core library, it is an async operation and thus you need the "await" command added.
-        this.ux.log(messages.getMessage('commandStartMessage',[this.flags.testcoveragefile]));
+        this.ux.log(messages.getMessage('commandStartMessage', [this.flags.testcoveragefile]));
         checkResult['testCoverageFileReviewed'] = this.flags.testcoveragefile;
         // JSON.parse(fs.readFileSync(projectFile.getPath(), 'UTF-8'));
         // const coverages = await core.fs.readJsonMap(this.flags.testcoveragefile);
@@ -48,9 +49,16 @@ export default class Check extends SfdxCommand {
         let orgHasSufficientCodeCoverage = true;
         const actionMessages = [];
 
-        // this.ux.log(coverages);
+        const ignoreClassCoverageProjectJsonSetting = _.get(projectJson['contents'], 'plugins.rstk.coverageRequirement.ignoreClassCoverage', false) as boolean;
+        const ignoreOrgCoverageProjectJsonSetting = _.get(projectJson['contents'], 'plugins.rstk.coverageRequirement.ignoreOrgCoverage', false) as boolean;
 
-        if ( ! this.flags.ignoreorgcoverage ) {
+        // flag true should override attribute.  the flag=true means that we should ignore, so don't go into the If/block
+        // flag = null    attribute = true    reasult = false
+        // flag = true    attribute = true    reasult = false
+        // flag = null    attribute = false    reasult = true
+        // flag = true    attribute = false    reasult = false
+
+        if ( ! this.flags.ignoreorgcoverage && ! ignoreOrgCoverageProjectJsonSetting) {
             const converageRequirementForOrg = _.get(projectJson['contents'], 'plugins.rstk.coverageRequirement.org', 50);
             const summaryResultInformation = testResultInformation.summary;
             const orgWideCoverage = summaryResultInformation.orgWideCoverage.replace('%', '');
@@ -78,7 +86,7 @@ export default class Check extends SfdxCommand {
             checkResult['coverage'].org = orgSuccessResult;
         }
 
-        if ( ! this.flags.ignoreclasscoverage ) {
+        if ( ! this.flags.ignoreclasscoverage && ! ignoreClassCoverageProjectJsonSetting) {
             const converageRequirementForApexClass = _.get(projectJson['contents'], 'plugins.rstk.coverageRequirement.classes', 75);
 
             const coverageResultInformation = testResultInformation.coverage;
@@ -87,14 +95,13 @@ export default class Check extends SfdxCommand {
             const coverageSubsectionResultInformation = coverageResultInformation.coverage;
             // this.ux.logJson(coverageSubsectionResultInformation);
 
-            
             // orgSuccessResult['success'] = false;
             const classDetailCoverages = [];
 
             // classesResult['classes'] = orgSuccessResult;
             // checkResult['coverage'] = classesResult;
 
-            // The following output only works if the testcoveragefile is test-result-codecoverage.json file
+            // The following output only works if the testcoveragefile is test-result-7070000000.json file
             // this reviews the individual coverage for each Apex class file
             _.forEach(coverageSubsectionResultInformation, coverage => {
                 const classSuccessResult = {};
@@ -124,11 +131,14 @@ export default class Check extends SfdxCommand {
             checkResult['coverage'].classes = classesResult;
         }
 
+        const throwErrorOnInsufficientOrgCoverageProjectJsonSetting = _.get(projectJson['contents'], 'plugins.rstk.coverageRequirement.throwErrorOnInsufficientOrgCoverage', false) as boolean;
+        const throwErrorOnInsufficientClassCoverageProjectJsonSetting = _.get(projectJson['contents'], 'plugins.rstk.coverageRequirement.throwErrorOnInsufficientClassCoverage', false) as boolean;
+
         // throw error if called for
-        if ( (!this.flags.ignoreorgcoverage && this.flags.throwerroroninsufficientorgcoverage && !orgHasSufficientCodeCoverage)
-            || (!this.flags.ignoreclasscoverage && this.flags.throwerroroninsufficientclasscoverage && !allClassesHaveSufficientCodeCoverage)
+        if ( (!this.flags.ignoreorgcoverage && ( this.flags.throwerroroninsufficientorgcoverage || throwErrorOnInsufficientOrgCoverageProjectJsonSetting) && !orgHasSufficientCodeCoverage)
+            || (!this.flags.ignoreclasscoverage && (this.flags.throwerroroninsufficientclasscoverage || throwErrorOnInsufficientClassCoverageProjectJsonSetting) && !allClassesHaveSufficientCodeCoverage)
         ) {
-           throw new core.SfdxError('Code Coverage Insufficient', 'CODE COVERAGE INSUFFICIENT', actionMessages, 1, null); 
+           throw new core.SfdxError('Code Coverage Insufficient', 'CODE COVERAGE INSUFFICIENT', actionMessages, 1, null);
         }
 
         // Return an object to be displayed with --json

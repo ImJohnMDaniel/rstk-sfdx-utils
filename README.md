@@ -22,7 +22,7 @@ $ npm install -g rstk-sfdx-utils
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-rstk-sfdx-utils/0.0.1 darwin-x64 node-v11.10.1
+rstk-sfdx-utils/0.0.2 darwin-x64 node-v11.10.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -89,5 +89,5 @@ EXAMPLES
   Reviewing code coverage from file test-result-707000000000000.json
 ```
 
-_See code: [src/commands/rstk/apex/codecoverage/check.ts](https://github.com/RootstockMFG/rstk-sfdx-utils/blob/v0.0.1/src/commands/rstk/apex/codecoverage/check.ts)_
+_See code: [src/commands/rstk/apex/codecoverage/check.ts](https://github.com/RootstockMFG/rstk-sfdx-utils/blob/v0.0.2/src/commands/rstk/apex/codecoverage/check.ts)_
 <!-- commandsstop -->

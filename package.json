@@ -1,7 +1,7 @@
 {
   "name": "rstk-sfdx-utils",
   "description": "Collection of commands to work with SalesforceDX codebases",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "John M. Daniel @ImJohnMDaniel",
   "bugs": "https://github.com/RootstockMFG/rstk-sfdx-utils/issues",
   "dependencies": {
